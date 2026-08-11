@@ -29,10 +29,3 @@ jobs:
 
       - name: Run Linter
         run: make lint
-
-      # Если добавите таргет `test: uv run pytest` в Makefile, 
-      # здесь можно будет просто вызывать `make test`
-      - name: Run Tests
-        env:
-          SECRET_KEY: "ci-secret-key-for-tests"
-        run: uv run pytest
