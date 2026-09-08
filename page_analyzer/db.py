@@ -14,17 +14,16 @@ def get_db_connection():
 def get_all_urls():
     with get_db_connection() as conn:
         with conn.cursor() as cursor:
-            # Получаем все URL и дату последней проверки для каждого из них
             cursor.execute(
                 """
-                SELECT 
-                    urls.id, 
-                    urls.name, 
-                    MAX(url_checks.created_at) AS last_check
+                SELECT DISTINCT ON (urls.id)
+                    urls.id,
+                    urls.name,
+                    url_checks.created_at AS last_check,
+                    url_checks.status_code AS status_code
                 FROM urls
                 LEFT JOIN url_checks ON urls.id = url_checks.url_id
-                GROUP BY urls.id, urls.name
-                ORDER BY urls.id DESC;
+                ORDER BY urls.id DESC, url_checks.id DESC;
                 """
             )
             return cursor.fetchall()
@@ -66,16 +65,16 @@ def add_url(name):
             return result['id']
 
 
-def add_url_check(url_id):
+def add_url_check(url_id, status_code=None):
     with get_db_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO url_checks (url_id)
-                VALUES (%s)
+                INSERT INTO url_checks (url_id, status_code)
+                VALUES (%s, %s)
                 RETURNING id;
                 """,
-                (url_id,)
+                (url_id, status_code)
             )
             result = cursor.fetchone()
             conn.commit()

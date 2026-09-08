@@ -8,6 +8,7 @@ from flask import (
     request,
     url_for,
 )
+import requests
 
 from page_analyzer import db
 from page_analyzer.url import normalize_url, validate_url
@@ -69,6 +70,13 @@ def create_check(id):
         flash('Страница не найдена', 'danger')
         return redirect(url_for('show_urls'))
 
-    db.add_url_check(id)
+    try:
+        response = requests.get(url_record['name'], timeout=5)
+        response.raise_for_status()
+    except requests.RequestException:
+        flash('Произошла ошибка при проверке', 'danger')
+        return redirect(url_for('show_url', id=id))
+
+    db.add_url_check(id, response.status_code)
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('show_url', id=id))
