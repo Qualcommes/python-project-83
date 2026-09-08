@@ -65,16 +65,16 @@ def add_url(name):
             return result['id']
 
 
-def add_url_check(url_id, status_code=None):
+def add_url_check(url_id, status_code=None, h1=None, title=None, description=None):
     with get_db_connection() as conn:
         with conn.cursor() as cursor:
             cursor.execute(
                 """
-                INSERT INTO url_checks (url_id, status_code)
-                VALUES (%s, %s)
+                INSERT INTO url_checks (url_id, status_code, h1, title, description)
+                VALUES (%s, %s, %s, %s, %s)
                 RETURNING id;
                 """,
-                (url_id, status_code)
+                (url_id, status_code, h1, title, description)
             )
             result = cursor.fetchone()
             conn.commit()

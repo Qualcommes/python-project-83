@@ -11,6 +11,7 @@ from flask import (
 import requests
 
 from page_analyzer import db
+from page_analyzer.parser import parse_html
 from page_analyzer.url import normalize_url, validate_url
 
 load_dotenv()
@@ -77,6 +78,15 @@ def create_check(id):
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('show_url', id=id))
 
-    db.add_url_check(id, response.status_code)
+    parsed_data = parse_html(response.text)
+
+    db.add_url_check(
+        id,
+        status_code=response.status_code,
+        h1=parsed_data['h1'],
+        title=parsed_data['title'],
+        description=parsed_data['description']
+    )
+
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('show_url', id=id))
