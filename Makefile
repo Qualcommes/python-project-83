@@ -1,5 +1,5 @@
 install:
-	uv sync
+	uv sync --frozen --no-install-python
 
 setup: install
 
@@ -23,3 +23,6 @@ render-start:
 
 test:
 	uv run pytest
+
+start-server:
+	uv run --no-install-python gunicorn -w 5 -b 0.0.0.0:8000 page_analyzer:app
