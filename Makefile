@@ -1,9 +1,5 @@
 install:
-	uv sync --python-preference only-system
-
-setup: install
-
-code-setup: setup
+	uv sync
 
 lint:
 	uv run ruff check .
