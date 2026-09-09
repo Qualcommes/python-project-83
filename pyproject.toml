@@ -15,6 +15,3 @@ dependencies = [
     "ruff>=0.15.20",
     "validators>=0.35.0",
 ]
-
-[tool.uv]
-python-preference = "only-system"
