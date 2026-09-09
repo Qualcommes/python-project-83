@@ -1,10 +1,6 @@
 install:
 	uv sync
 
-setup: install
-
-code-setup: setup
-
 lint:
 	uv run ruff check .
 
