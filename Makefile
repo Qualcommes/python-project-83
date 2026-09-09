@@ -1,6 +1,10 @@
 install:
 	uv sync
 
+setup: install
+
+code-setup: setup
+
 lint:
 	uv run ruff check .
 
@@ -21,4 +25,4 @@ test:
 	uv run pytest
 
 start-server:
-	uv run --no-install-python gunicorn -w 5 -b 0.0.0.0:8000 page_analyzer:app
+	.venv/bin/gunicorn -w 5 -b 0.0.0.0:8000 page_analyzer:app
