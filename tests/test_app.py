@@ -4,7 +4,6 @@ def test_index_page(client):
 
     html = response.get_data(as_text=True)
     
-    # Проверяем наличие заголовка и ключевых элементов
     assert 'Анализатор страниц' in html
     assert 'bootstrap.min.css' in html
     assert '<form' in html
