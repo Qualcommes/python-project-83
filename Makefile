@@ -1,5 +1,5 @@
 install:
-	uv sync --frozen --no-install-python
+	uv sync --python-preference only-system
 
 setup: install
 
