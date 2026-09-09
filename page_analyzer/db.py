@@ -7,7 +7,7 @@ load_dotenv()
 
 
 def get_db_connection():
-    database_url = os.getenv('DATABASE_URL')
+    database_url = os.getenv('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/page_analyzer')
     return psycopg.connect(database_url, row_factory=dict_row)
 
 
